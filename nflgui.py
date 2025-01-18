@@ -133,7 +133,7 @@ if len(db)==0:
 #        pass
 #    case _:
 if db[0]=='':
-        connection = sqlite3.connect('c://users//2019//desktop//print//nfl.db')
+        connection = sqlite3.connect('nfl.db')
         nfl = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection).drop(columns=['index'])
         lastdate = pd.read_sql(f'SELECT Max(Date) as Date FROM games',connection)['Date'].tolist()[0]
         nfl['Date']=pd.to_datetime(nfl['Date'])
