@@ -178,8 +178,8 @@ if db[0]=='':
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(nfl)} total rows<br>Last updated: {lastdate} CT</i>',unsafe_allow_html=True)
         st.title('NFL Game Details')
-        nfl2 = pd.read_sql(f'SELECT * FROM games',connection)
-        nfl2b = pd.read_sql(f'SELECT * FROM games',connection2)
+        nfl2 = pd.read_sql(f'SELECT * FROM games',connection).drop(columns='index')
+        nfl2b = pd.read_sql(f'SELECT * FROM games',connection2).drop(columns='index')
         nfl2 = pd.concat([nfl2,nfl2b])
         nfl2['Date']=pd.to_datetime(nfl2['Date'],format='mixed')
         nfl2['GameDate']=pd.to_datetime(nfl2['GameDate'],format='mixed') - td(hours=6)
@@ -228,15 +228,8 @@ if db[0]=='an':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-
 if db[0]=='bga':
-        #connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
-        flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
-        if len(flist) == 0:
-            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
-            flist.sort()
-            os.system('cat ' + ' '.join(flist) + ' > bga.db')
-        connection = sqlite3.connect('bga.db')        
+        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
 #        bga['Date'] = pd.to_datetime(bga['Date'])
         bga = bga.sort_values(['table'],ascending=False)
