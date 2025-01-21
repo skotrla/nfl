@@ -204,7 +204,13 @@ if db[0]=='':
         st.title(f'NFL Game Counts {minscores}+ Scores {minyear}-{maxyear}')
         st.dataframe(fdf4, use_container_width=False,hide_index=True)
 if db[0]=='an':
-        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
+        #connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
+        flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
+        if len(flist) == 0:
+            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
+            flist.sort()
+            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+        connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
         #bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
         bga['Date'] = pd.to_datetime(bga['Date'])
