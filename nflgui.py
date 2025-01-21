@@ -134,10 +134,17 @@ if len(db)==0:
 #    case _:
 if db[0]=='':
         connection = sqlite3.connect('nfl.db')
+        connection2 = sqlite3.connect('nfl2.db')
+        #nfl = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection).drop(columns=['index'])
+        #lastdate = pd.read_sql(f'SELECT Max(Date) as Date FROM games',connection)['Date'].tolist()[0]
         nfl = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection).drop(columns=['index'])
-        lastdate = pd.read_sql(f'SELECT Max(Date) as Date FROM games',connection)['Date'].tolist()[0]
-        nfl['Date']=pd.to_datetime(nfl['Date'])
-        nfl['GameDate']=pd.to_datetime(nfl['GameDate']) - td(hours=6)
+        nflb = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection2).drop(columns=['index'])
+        nflc = pd.concat([nfl,nflb])
+        nflb = nflc.groupby(['Week','Year','RTeamN']).agg({'Date':'max'}).reset_index()
+        nfl = nflc.merge(nflb,how='inner',on=['Week','Year','RTeamN','Date'])
+        lastdate = nfl['Date'].max()
+        nfl['Date']=pd.to_datetime(nfl['Date'],format='mixed')
+        nfl['GameDate']=pd.to_datetime(nfl['GameDate'],format='mixed') - td(hours=6)
         nfl['SCutoff'] = nfl['SCutoff'].astype('float')        
         nfl['OCutoff'] = nfl['OCutoff'].astype('float')        
         coll = nfl.columns
@@ -169,8 +176,10 @@ if db[0]=='':
         st.markdown(f'<i>{len(fdf)} rows out of {len(nfl)} total rows<br>Last updated: {lastdate} CT</i>',unsafe_allow_html=True)
         st.title('NFL Game Details')
         nfl2 = pd.read_sql(f'SELECT * FROM games',connection)
-        nfl2['Date']=pd.to_datetime(nfl2['Date'])
-        nfl2['GameDate']=pd.to_datetime(nfl2['GameDate']) - td(hours=6)
+        nfl2b = pd.read_sql(f'SELECT * FROM games',connection2)
+        nfl2 = pd.concat([nfl2,nfl2b])
+        nfl2['Date']=pd.to_datetime(nfl2['Date'],format='mixed')
+        nfl2['GameDate']=pd.to_datetime(nfl2['GameDate'],format='mixed') - td(hours=6)
         nfl2 = nfl2.merge(fdf[['Year','Week','RTeamN']],how='inner',on=['Year','Week','RTeamN'])
         connection.close()
         fdf2 = filter_dataframe(nfl2,[])
