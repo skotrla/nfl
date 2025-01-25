@@ -231,7 +231,13 @@ if db[0]=='an':
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
 if db[0]=='bga':
-        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
+        #connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
+        flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
+        if len(flist) == 0:
+            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
+            flist.sort()
+            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+        connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
 #        bga['Date'] = pd.to_datetime(bga['Date'])
         bga = bga.sort_values(['table'],ascending=False)
