@@ -221,7 +221,7 @@ if db[0]=='an':
         connection.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,coll)
-        st.title('Ark Nova Stats R0.1')
+        st.title('Ark Nova Stats')
         #st.data_editor(
         #    fdf,
         #    column_config={
