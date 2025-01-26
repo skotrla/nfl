@@ -12,7 +12,7 @@ import numpy as np
 import warnings
 import os
 
-v = 0.11
+v = 0.12
 
 warnings.filterwarnings("ignore")
 
@@ -231,7 +231,7 @@ if db[0]=='an':
         bga['Date'] = pd.to_datetime(bga['Date'])
         bga = bga.sort_values(['Date'],ascending=False)
 #        lastdate = bga['Date'].max()
-        lastdate = pd.read_sql(f'SELECT MAX(Date) FROM lastdate',connection2)['Date'].tolist()[0]
+        lastdate = pd.read_sql(f'SELECT MAX(Date) as Date FROM lastdate',connection2)['Date'].tolist()[0]
         connection.close()
         connection2.close()
         coll = bga.columns
@@ -274,7 +274,7 @@ if db[0]=='bga':
 #        dates['Date'] = pd.to_datetime(dates['Date']).dt.strftime('%Y-%m-%d')
 #        dates['Date'] = pd.to_datetime(dates['Date'])
 #        lastdate = dates['Date'].max()        
-        lastdate = pd.read_sql(f'SELECT MAX(Date) FROM lastdate',connection2)['Date'].tolist()[0]
+        lastdate = pd.read_sql(f'SELECT MAX(Date) as Date FROM lastdate',connection2)['Date'].tolist()[0]
         connection.close()
         connection2.close()
         coll = bga.columns
