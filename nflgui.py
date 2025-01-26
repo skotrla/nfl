@@ -211,7 +211,7 @@ if db[0]=='an':
         if len(flist) == 0:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
-#            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+            os.system('cat ' + ' '.join(flist) + ' > bga.db')
         connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
         #bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
