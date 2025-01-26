@@ -12,7 +12,7 @@ import numpy as np
 import warnings
 import os
 
-v = 0.13
+v = 0.1
 
 warnings.filterwarnings("ignore")
 
@@ -260,8 +260,8 @@ if db[0]=='bga':
         pl = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection)
         plb = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection2)
         pl = pd.concat([pl,plb]).drop_duplicates()['player'].tolist()
-        gt = pd.read_sql(f'SELECT * FROM games WHERE player IN ({str(pl){1:-1]})',connection)
-        gtb = pd.read_sql(f'SELECT * FROM games WHERE player IN ({str(pl){1:-1]})',connection2)
+        gt = pd.read_sql(f'SELECT * FROM games WHERE player IN ({str(pl)[1:-1]})',connection)
+        gtb = pd.read_sql(f'SELECT * FROM games WHERE player IN ({str(pl)[1:-1]})',connection2)
         gt = pd.concat([gt,gtb]).drop_duplicates()
         pt = pd.read_sql(f'SELECT player,name FROM players',connection)
         ptb = pd.read_sql(f'SELECT player,name FROM players',connection2)
