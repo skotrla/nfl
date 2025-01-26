@@ -213,7 +213,7 @@ if db[0]=='an':
         if len(flist) == 0:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
-            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+            #os.system('cat ' + ' '.join(flist) + ' > bga.db')
         connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
         #bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
@@ -241,7 +241,7 @@ if db[0]=='bga':
             os.system('cat ' + ' '.join(flist) + ' > bga.db')
         connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
-#        bga['Date'] = pd.to_datetime(bga['Date'])
+        bga['Date'] = pd.to_datetime(bga['Date'])
         bga = bga.sort_values(['table'],ascending=False)
         dates = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index']) 
         #dates['Date'] = pd.to_datetime(dates['Date']).dt.strftime('%Y-%m-%d')
