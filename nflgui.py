@@ -221,7 +221,10 @@ if db[0]=='an':
 #            os.system('cat ' + ' '.join(flist) + ' > bga.db')
             join_files(flist, 'bga.db')
         connection = sqlite3.connect('bga.db')        
+        connection2 = sqlite3.connect('bga2.db')    
         bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
+        bgab = pd.read_sql(f'SELECT * FROM arknova', connection2).drop(columns=['index'])
+        bga = pd.concat([bga,bgab])
         #bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
         bga['Date'] = pd.to_datetime(bga['Date'])
         bga = bga.sort_values(['Date'],ascending=False)
@@ -229,7 +232,7 @@ if db[0]=='an':
         connection.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,coll)
-        st.title('Ark Nova Stats')
+        st.title('Ark Nova Stats 0.1')
         #st.data_editor(
         #    fdf,
         #    column_config={
@@ -246,18 +249,32 @@ if db[0]=='bga':
             flist.sort()
 #            os.system('cat ' + ' '.join(flist) + ' > bga.db')
             join_files(flist, 'bga.db')
-        connection = sqlite3.connect('bga.db')        
-        bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
+        connection = sqlite3.connect('bga.db')
+        connection2 = sqlite3.connect('bga2.db')    
+#        bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
 #        bga['Date'] = pd.to_datetime(bga['Date'])
+        pl = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection)
+        plb = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection2)
+        pl = pd.concat([pl,plb]).drop_duplicates()['player'].tolist()
+        gt = pd.read_sql(f'SELECT * FROM games WHERE player IN ({pl})',connection)
+        gtb = pd.read_sql(f'SELECT * FROM games WHERE player IN ({pl})',connection2)
+        gt = pd.concat([gt,gtb]).drop_duplicates()
+        pt = pd.read_sql(f'SELECT player,name FROM players',connection)
+        ptb = pd.read_sql(f'SELECT player,name FROM players',connection2)
+        pt = pd.concat([pt,ptb]).drop_duplicates()
+        bga = gt.merge(pt,how='inner',on='player')
         bga = bga.sort_values(['table'],ascending=False)
-        dates = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index']) 
-        #dates['Date'] = pd.to_datetime(dates['Date']).dt.strftime('%Y-%m-%d')
-        dates['Date'] = pd.to_datetime(dates['Date'])
-        lastdate = dates['Date'].max()        
+#        dates = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
+#        datesb = pd.read_sql(f'SELECT * FROM arknova', connection2).drop(columns=['index'])
+#        dates = pd.concat([dates,datesb]).drop_duplicates()
+#        dates['Date'] = pd.to_datetime(dates['Date']).dt.strftime('%Y-%m-%d')
+#        dates['Date'] = pd.to_datetime(dates['Date'])
+#        lastdate = dates['Date'].max()        
+        lastdate = pd.read_sql(f'SELECT MAX(Date) FROM lastdate',connection2)['Date'].tolist()[0]
         connection.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,coll)
-        st.title('BGA Stats')
+        st.title('BGA Stats 0.1')
         #st.data_editor(
         #    fdf,
         #    column_config={
