@@ -227,9 +227,9 @@ if db[0]=='an':
         bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
         bgab = pd.read_sql(f'SELECT * FROM arknova', connection2).drop(columns=['index'])
         bga = pd.concat([bga,bgab])
-        #bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
-        bga['Date'] = pd.to_datetime(bga['Date'])
-        bga = bga.sort_values(['Date'],ascending=False)
+#        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
+#        bga['Date'] = pd.to_datetime(bga['Date'])
+#        bga = bga.sort_values(['Date'],ascending=False)
 #        lastdate = bga['Date'].max()
         lastdate = pd.read_sql(f'SELECT MAX(Date) as Date FROM lastdate',connection2)['Date'].tolist()[0]
         connection.close()
