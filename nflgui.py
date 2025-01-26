@@ -12,6 +12,8 @@ import numpy as np
 import warnings
 import os
 
+v = 0.11
+
 warnings.filterwarnings("ignore")
 
 id = 0
@@ -228,11 +230,13 @@ if db[0]=='an':
         #bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
         bga['Date'] = pd.to_datetime(bga['Date'])
         bga = bga.sort_values(['Date'],ascending=False)
-        lastdate = bga['Date'].max()
+#        lastdate = bga['Date'].max()
+        lastdate = pd.read_sql(f'SELECT MAX(Date) FROM lastdate',connection2)['Date'].tolist()[0]
         connection.close()
+        connection2.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,coll)
-        st.title('Ark Nova Stats 0.1')
+        st.title('Ark Nova Stats '+ str(v))
         #st.data_editor(
         #    fdf,
         #    column_config={
@@ -272,9 +276,10 @@ if db[0]=='bga':
 #        lastdate = dates['Date'].max()        
         lastdate = pd.read_sql(f'SELECT MAX(Date) FROM lastdate',connection2)['Date'].tolist()[0]
         connection.close()
+        connection2.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,coll)
-        st.title('BGA Stats 0.1')
+        st.title('BGA Stats '+ str(v))
         #st.data_editor(
         #    fdf,
         #    column_config={
