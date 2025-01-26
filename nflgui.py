@@ -248,7 +248,7 @@ if db[0]=='bga':
             join_files(flist, 'bga.db')
         connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
-        bga['Date'] = pd.to_datetime(bga['Date'])
+#        bga['Date'] = pd.to_datetime(bga['Date'])
         bga = bga.sort_values(['table'],ascending=False)
         dates = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index']) 
         #dates['Date'] = pd.to_datetime(dates['Date']).dt.strftime('%Y-%m-%d')
