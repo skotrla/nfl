@@ -99,6 +99,12 @@ def filter_dataframe(df: pd.DataFrame, coll=[]) -> pd.DataFrame:
 
     return df
 
+def join_files(input_files, output_file):
+    with open(output_file, "wb") as outfile:
+        for filename in input_files:
+            with open(filename, "rb") as infile:
+                outfile.write(infile.read())
+
 #streamlit run nflgui.py --server.port=4016
 st.set_page_config(layout="wide")
 st.markdown("""
@@ -207,11 +213,13 @@ if db[0]=='':
         st.dataframe(fdf4, use_container_width=False,hide_index=True)
 if db[0]=='an':
 #        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
+        os.remove('bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
         if len(flist) == 0:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
-            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+#            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+        join_files(flist, 'bga.db')
         connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
         #bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
@@ -236,7 +244,8 @@ if db[0]=='bga':
         if len(flist) == 0:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
-            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+#            os.system('cat ' + ' '.join(flist) + ' > bga.db')
+            join_files(flist, 'bga.db')
         connection = sqlite3.connect('bga.db')        
         bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
         bga['Date'] = pd.to_datetime(bga['Date'])
