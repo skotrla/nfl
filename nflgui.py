@@ -208,8 +208,6 @@ if db[0]=='':
 if db[0]=='an':
 #        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
-        if True:
-            os.remove('bga.db')
         if len(flist) == 0:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
