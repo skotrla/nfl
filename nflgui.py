@@ -284,7 +284,7 @@ if db[0]=='bga':
         connection.close()
         connection2.close()
         coll = bga.columns
-        fdf = filter_dataframe(bga,coll)
+        fdf = filter_dataframe(bga,['name'])
         st.title('BGA Stats '+ str(v))
         #st.data_editor(
         #    fdf,
