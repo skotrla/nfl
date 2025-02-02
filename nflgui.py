@@ -273,6 +273,7 @@ if db[0]=='bga':
         pt = pd.concat([pt,ptb]).drop_duplicates()
         bga = gt.merge(pt,how='inner',on='player')
         bga = bga.sort_values(['table'],ascending=False)
+        bga['table'] = bga['table'].astype('int')
 #        dates = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
 #        datesb = pd.read_sql(f'SELECT * FROM arknova', connection2).drop(columns=['index'])
 #        dates = pd.concat([dates,datesb]).drop_duplicates()
