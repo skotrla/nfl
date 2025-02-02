@@ -229,7 +229,11 @@ if db[0]=='an':
         bga = pd.concat([bga,bgab])
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
         bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
-#        bga = bga.sort_values(['Date'],ascending=False)
+        bga = bga.sort_values(['Date'],ascending=False)
+        winner = bga.groupby['table'].agg({'score':'max'}).reset_index().rename(columns={'score':'max'})
+        bga = bga.merge(winner,how='inner',on='table')
+        bga['winner']=np.where(bga['score']==bga['max'],True,False)
+        bga = bga.drop(columns='max')    
 #        lastdate = bga['Date'].max()
         lastdate = pd.read_sql(f'SELECT MAX(Date) as Date FROM lastdate',connection2)['Date'].tolist()[0]
         connection.close()
