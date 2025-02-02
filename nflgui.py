@@ -240,7 +240,7 @@ if db[0]=='an':
         connection.close()
         connection2.close()
         coll = bga.columns
-        fdf = filter_dataframe(bga,[player])
+        fdf = filter_dataframe(bga,['player'])
         st.title('Ark Nova Stats '+ str(v))
         #st.data_editor(
         #    fdf,
