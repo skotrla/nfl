@@ -12,7 +12,7 @@ import numpy as np
 import warnings
 import os
 
-v = 0.1
+v = 1.0
 
 warnings.filterwarnings("ignore")
 
