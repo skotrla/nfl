@@ -286,6 +286,7 @@ if db[0]=='bga':
         bga['date_delta'].interpolate(method='index', inplace=True)
         bga.reset_index(inplace=True)
         bga['Date'] = np.where(bga['Date'].isnull(), pd.to_datetime((bga['Date'].min() + pd.TimedeltaIndex(bga['date_delta'], unit='D')).astype('str').str[:10]),bga['Date'])
+        bga = bga.drop(columns=['date_delta'])
 #        dates = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
 #        datesb = pd.read_sql(f'SELECT * FROM arknova', connection2).drop(columns=['index'])
 #        dates = pd.concat([dates,datesb]).drop_duplicates()
