@@ -283,7 +283,7 @@ if db[0]=='bga':
         bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
         bga['date_delta'] = (bga['Date'] - bga['Date'].min())  / np.timedelta64(1,'D')
         bga.set_index('table', inplace=True)
-        bga['date_delta'].interpolate(method='index', inplace=True)
+        bga['date_delta'].interpolate(method='index', limit_direction='both', inplace=True)
         bga.reset_index(inplace=True)
         bga['Date'] = np.where(bga['Date'].isnull(), pd.to_datetime((bga['Date'].min() + pd.TimedeltaIndex(bga['date_delta'], unit='D')).astype('str').str[:10]),bga['Date'])
         bga = bga.drop(columns=['date_delta'])
