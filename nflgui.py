@@ -274,7 +274,7 @@ if db[0]=='bga':
         bga = gt.merge(pt,how='inner',on='player')
         bga = bga.sort_values(['table'],ascending=False)
         bga['table'] = bga['table'].astype('int')
-        bga = bga.drop(columns=['index','date','elo2','elo change2','player','Date'])
+        bga = bga.drop(columns=['index','date','elo2','elo change2','player'])
         bga2 = pd.read_sql(f'SELECT "table",Date FROM arknova', connection)
         bga2b = pd.read_sql(f'SELECT "table",Date FROM arknova', connection2)
         bga2 = pd.concat([bga2,bga2b])
