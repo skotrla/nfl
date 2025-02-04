@@ -277,7 +277,7 @@ if db[0]=='bga':
         bga2 = pd.read_sql(f'SELECT "table",Date FROM arknova', connection)
         bga2b = pd.read_sql(f'SELECT "table",Date FROM arknova', connection2)
         bga2 = pd.concat([bga2,bga2b])
-        bga = bga.merge(bga2,how='left',on='table')
+        #bga = bga.merge(bga2,how='left',on='table')
         bga['table'] = bga['table'].astype('int')
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
         bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
