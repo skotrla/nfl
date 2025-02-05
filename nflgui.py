@@ -279,6 +279,8 @@ if db[0]=='bga':
         bga2 = pd.concat([bga2,bga2b])
         bga = bga.merge(bga2,how='left',on=['table','name'])
         bga['table'] = bga['table'].astype('int')
+        bga['elo'] = bga['elo'].astype('int')
+        bga['elo change'] = bga['elo change'].astype('int')        
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
         bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
         bga['date_delta'] = (bga['Date'] - bga['Date'].min())  / np.timedelta64(1,'D')
