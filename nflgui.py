@@ -323,6 +323,7 @@ if db[0]=='andb':
             join_files(flist, 'bga.db')
         connection = sqlite3.connect('bga.db')        
         connection2 = sqlite3.connect('bga2.db')    
+        sql[0]=sql[0].replace('_',' ')
         bga = pd.read_sql(f'SELECT * FROM arknovap WHERE {sql[0]}', connection).drop(columns=['index'])
         bga['Number of turns']=bga['Number of turns'].str.replace('-','0').astype('int')
         bga['Score']=np.where(bga['Score'] == '-',0,bga['Score'])
@@ -330,7 +331,7 @@ if db[0]=='andb':
         if len(bga) >= 100000:
             bga = bga[bga['Number of turns'] <= 35]
             bga = bga[bga['Score'] >= 100]
-#        bgab = pd.read_sql(f'SELECT * FROM arknovap WHERE {sql[0]}', connection2).drop(columns=['index'])
+#        bgab = pd.read_sql(f'SELECT * FROM arknovap {sql[0]}', connection2).drop(columns=['index'])
 #        bga = pd.concat([bga,bgab])
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
 #        bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
