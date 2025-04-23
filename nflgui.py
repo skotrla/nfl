@@ -346,7 +346,7 @@ if db[0]=='andb':
         connection2.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,['player'])
-        st.title('Ark Nova Stats '+ str(v))
+        st.title('Ark Nova Stats '+ str(v) + ' ' + sql[0])
         #st.data_editor(
         #    fdf,
         #    column_config={
