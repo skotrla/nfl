@@ -326,10 +326,10 @@ if db[0]=='andb':
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
 #        bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
 #        bga = bga.sort_values(['Date'],ascending=False)
-        bga['score']=bga['score'].astype('float')
-        winner = bga.groupby(['table']).agg({'score':'max'}).reset_index().rename(columns={'score':'max'})
+        bga['Score']=bga['Score'].astype('float')
+        winner = bga.groupby(['table']).agg({'Score':'max'}).reset_index().rename(columns={'Score':'max'})
         bga = bga.merge(winner,how='inner',on='table')
-        bga['winner']=np.where(bga['score']==bga['max'],True,False)
+        bga['winner']=np.where(bga['Score']==bga['max'],True,False)
         bga = bga.drop(columns='max')    
 #        lastdate = bga['Date'].max()
         lastdate = pd.read_sql(f'SELECT MAX(Date) as Date FROM lastdate',connection2)['Date'].tolist()[0]
