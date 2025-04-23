@@ -136,6 +136,9 @@ st.markdown("""
 db = st.query_params.get_all('db')
 if len(db)==0:
     db.append('')
+sql = st.query_params.get_all('sql')
+if len(sql)==0:
+    sql.append('')
 
 #match db[0]:
 #    case 'alt':
@@ -322,15 +325,15 @@ if db[0]=='andb':
         connection2 = sqlite3.connect('bga2.db')    
         bga = pd.read_sql(f'SELECT * FROM arknovap', connection).drop(columns=['index'])
         bga['Number of turns']=bga['Number of turns'].str.replace('-','0').astype('int')
-        bga = bga[bga['Number of turns'] <= 35]
-#        bgab = pd.read_sql(f'SELECT * FROM arknovap', connection2).drop(columns=['index'])
+#        bga = bga[bga['Number of turns'] <= 35]
+#        bgab = pd.read_sql(f'SELECT * FROM arknovap WHERE {sql[0]}', connection2).drop(columns=['index'])
 #        bga = pd.concat([bga,bgab])
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
 #        bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
 #        bga = bga.sort_values(['Date'],ascending=False)
         bga['Score']=np.where(bga['Score'] == '-',0,bga['Score'])
         bga['Score']=bga['Score'].astype('int')
-        bga = bga[bga['Score'] >= 100]
+#        bga = bga[bga['Score'] >= 100]
         winner = bga.groupby(['table']).agg({'Score':'max'}).reset_index().rename(columns={'Score':'max'})
         bga = bga.merge(winner,how='inner',on='table')
         bga['winner']=np.where(bga['Score']==bga['max'],True,False)
