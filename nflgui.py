@@ -322,7 +322,7 @@ if db[0]=='andb':
         connection2 = sqlite3.connect('bga2.db')    
         bga = pd.read_sql(f'SELECT * FROM arknovap WHERE length(Score) >= 3 AND', connection).drop(columns=['index'])
         bga['Number of turns']=bga['Number of turns'].str.replace('-','0').astype('int')
-        bga = bga[bga['Number of turns] <= 35]
+        bga = bga[bga['Number of turns'] <= 35]
 #        bgab = pd.read_sql(f'SELECT * FROM arknovap', connection2).drop(columns=['index'])
 #        bga = pd.concat([bga,bgab])
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
