@@ -320,7 +320,7 @@ if db[0]=='andb':
             join_files(flist, 'bga.db')
         connection = sqlite3.connect('bga.db')        
         connection2 = sqlite3.connect('bga2.db')    
-        bga = pd.read_sql(f'SELECT * FROM arknovap', connection).drop(columns=['index'])
+        bga = pd.read_sql(f'SELECT * FROM arknovap WHERE length(Score) >= 3', connection).drop(columns=['index'])
 #        bgab = pd.read_sql(f'SELECT * FROM arknovap', connection2).drop(columns=['index'])
 #        bga = pd.concat([bga,bgab])
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
