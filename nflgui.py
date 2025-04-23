@@ -326,7 +326,7 @@ if db[0]=='andb':
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
 #        bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
 #        bga = bga.sort_values(['Date'],ascending=False)
-        bga['Score']=bga['Score'].astype('float')
+        bga['Score']=bga['Score'].str.replace('-','0').astype('float')
         winner = bga.groupby(['table']).agg({'Score':'max'}).reset_index().rename(columns={'Score':'max'})
         bga = bga.merge(winner,how='inner',on='table')
         bga['winner']=np.where(bga['Score']==bga['max'],True,False)
