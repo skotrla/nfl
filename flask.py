@@ -4,7 +4,6 @@ from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
 import base64
 from io import BytesIO
-import sqlalchemy
 from datetime import datetime as dt
 import numpy as np
 import streamlit as st
