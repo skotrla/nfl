@@ -242,4 +242,4 @@ else:
 buf = BytesIO()
 fig.savefig(buf, format="png")
 data = base64.b64encode(buf.getbuffer()).decode("ascii")
-st.write(f"{(dt.now() - start).total_seconds()} seconds<img src='data:image/png;base64,{data}'/>",allow_unsafe_html=True)
+st.write(f"{(dt.now() - start).total_seconds()} seconds<img src='data:image/png;base64,{data}'/>",unsafe_allow_html=True)
