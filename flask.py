@@ -33,7 +33,7 @@ if len(mymap)==0:
 if True:
     start = dt.now()
     if mydb == 'bga1':
-        connection = sqlite3.connect('c:\\print\\bga.db')
+        connection = sqlite3.connect('bga.db')
         sq1 = f'SELECT "table" FROM games GROUP BY "table" HAVING MAX(elo2) >= {mymin} AND MAX(elo2) <= {mymax}'
         sq2 = 'SELECT "table" FROM arknovap GROUP BY "table" HAVING COUNT(*) = 2'
         df3a = pd.read_sql(f'SELECT "Number of turns2" as turns, Score2, Map FROM arknovap WHERE (("Game result" LIKE "%1st%" AND Score2 >= 100) OR "Triggered end of game" = "Yes") AND "table" IN ({sq1}) AND "table" IN ({sq2})',connection)
@@ -70,7 +70,7 @@ if True:
             df6a.loc['All Maps'] = [df3a['perturn'].describe()['count'],df3a['perturn'].describe()['50%'],df3a['perturn'].describe()['mean'],df3a['perturn'].quantile(0.1),df3a['perturn'].quantile(0.9)]
             df6a = df6a.sort_values(['perturn 10 pct'],ascending=False).reset_index()
     else:
-        connection = sqlite3.connect('c:\\print\\bga.db')
+        connection = sqlite3.connect('bga.db')
         df = pd.read_sql(f'SELECT MAP,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY MAP,turns,perturn',connection)
         connection.close()
         if mytype != 'perturn':
