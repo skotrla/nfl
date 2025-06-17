@@ -36,8 +36,6 @@ def join_files(input_files, output_file):
             with open(filename, "rb") as infile:
                 outfile.write(infile.read())
 
-if os.path.getsize('bga.db') <= 1000:
-    os.remove('bga.db')
 flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
 if len(flist) == 0:
     flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
