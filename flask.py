@@ -91,6 +91,7 @@ else:
     connection.close()
     df3a['perturn'] = df3a['Score2'] / df3a['turns']
     df = df3a
+    df['count']=1
     if mytype != 'perturn':
         maplist = []
         for i in df['Map'].drop_duplicates().tolist():
