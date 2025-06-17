@@ -9,6 +9,8 @@ import numpy as np
 import streamlit as st
 import os
 
+st.set_page_config(layout="wide")
+
 mymin = st.query_params.get_all('min')
 if len(mymin)==0:
     mymin.append(300)
