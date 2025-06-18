@@ -83,17 +83,17 @@ if mydb == 'mysql':
         df6a.loc['All Maps'] = [df3a['perturn'].describe()['count'],df3a['perturn'].describe()['50%'],df3a['perturn'].describe()['mean'],df3a['perturn'].quantile(0.1),df3a['perturn'].quantile(0.9)]
         df6a = df6a.sort_values(['perturn 10 pct'],ascending=False).reset_index()
 else:
-    #connection = sqlite3.connect('bga.db')
-    #df = pd.read_sql(f'SELECT MAP,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY MAP,turns,perturn',connection)
-    #connection.close()
-    connection = sqlite3.connect('bga.db')
-    sq1 = f'SELECT "table" FROM games GROUP BY "table" HAVING MAX(CAST(elo2 AS INT)) >= {mymin} AND MAX(CAST(elo2 AS INT)) <= {mymax}'
-    sq2 = 'SELECT "table" FROM arknovap GROUP BY "table" HAVING COUNT(*) = 2'
-    df3a = pd.read_sql(f'SELECT "Number of turns2" as turns, Score2, Map FROM arknovap WHERE (("Game result" LIKE "%1st%" AND Score2 >= 100) OR "Triggered end of game" = "Yes") AND "table" IN ({sq1}) AND "table" IN ({sq2})',connection)
+    connection = sqlite3.connect('bga2flask.db')
+    df = pd.read_sql(f'SELECT MAP,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY MAP,turns,perturn',connection)
     connection.close()
-    df3a['perturn'] = df3a['Score2'] / df3a['turns']
-    df = df3a
-    df['count']=1
+    #connection = sqlite3.connect('bga.db')
+    #sq1 = f'SELECT "table" FROM games GROUP BY "table" HAVING MAX(CAST(elo2 AS INT)) >= {mymin} AND MAX(CAST(elo2 AS INT)) <= {mymax}'
+    #sq2 = 'SELECT "table" FROM arknovap GROUP BY "table" HAVING COUNT(*) = 2'
+    #df3a = pd.read_sql(f'SELECT "Number of turns2" as turns, Score2, Map FROM arknovap WHERE (("Game result" LIKE "%1st%" AND Score2 >= 100) OR "Triggered end of game" = "Yes") AND "table" IN ({sq1}) AND "table" IN ({sq2})',connection)
+    #connection.close()
+    #df3a['perturn'] = df3a['Score2'] / df3a['turns']
+    #df = df3a
+    #df['count']=1
     if mytype != 'perturn':
         maplist = []
         for i in df['Map'].drop_duplicates().tolist():
