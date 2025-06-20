@@ -14,23 +14,23 @@ st.set_page_config(layout="wide")
 mymin = st.query_params.get_all('min')
 if len(mymin)==0:
     mymin.append(300)
-    mymin = mymin[0]
+mymin = mymin[0]
 mymax = st.query_params.get_all('max')
 if len(mymax)==0:
     mymax.append(1000)
-    mymax = mymax[0]
+mymax = mymax[0]
 mytype = st.query_params.get_all('type')
 if len(mytype)==0:
     mytype.append('turns')
-    mytype = mytype[0]
+mytype = mytype[0]
 mydb = st.query_params.get_all('db')
 if len(mydb)==0:
     mydb.append('bga2')
-    mydb = mydb[0]
+mydb = mydb[0]
 mymap = st.query_params.get_all('map')
 if len(mymap)==0:
     mymap.append('all')
-    mymap = mymap[0]
+mymap = mymap[0]
 
 def join_files(input_files, output_file):
     with open(output_file, "wb") as outfile:
