@@ -44,6 +44,7 @@ if len(flist) == 0:
     flist.sort()
     join_files(flist, 'bga.db')
 
+st.write(str(mymin) + str(mymax) + mytype + mydb + mymap)
 start = dt.now()
 if mydb == 'bga1':
     connection = sqlite3.connect('bga.db')
