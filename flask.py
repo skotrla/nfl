@@ -47,30 +47,12 @@ if len(flist) == 0:
 start = dt.now()
 if mydb == 'bga1':
     connection = sqlite3.connect('bga.db')
-    sq1 = f'SELECT "table" FROM games GROUP BY "table" HAVING MAX(elo2) >= {mymin} AND MAX(elo2) <= {mymax}'
+    sq1 = f'SELECT "table" FROM games GROUP BY "table" HAVING MAX(CAST(elo AS INT)) >= {mymin} AND MAX(CAST(elo AS INT)) <= {mymax}'
     sq2 = 'SELECT "table" FROM arknovap GROUP BY "table" HAVING COUNT(*) = 2'
-    df3a = pd.read_sql(f'SELECT "Number of turns2" as turns, Score2, Map FROM arknovap WHERE (("Game result" LIKE "%1st%" AND Score2 >= 100) OR "Triggered end of game" = "Yes") AND "table" IN ({sq1}) AND "table" IN ({sq2})',connection)
+    df3a = pd.read_sql(f'SELECT "Number of turns" as turns, Score as Score2, Map FROM arknovap WHERE (("Game result" LIKE "%1st%" AND CAST(Score as INT) >= 100) OR "Triggered end of game" = "Yes") AND "table" IN ({sq1}) AND "table" IN ({sq2})',connection)
     connection.close()
-    df3a['perturn'] = df3a['Score2'] / df3a['turns']
-    if mytype != 'perturn':
-        df7a=df3a.groupby(['Map']).agg({'turns':['count','median','mean',('10 pct', lambda x: x.quantile(0.1)),('90 pct', lambda x: x.quantile(0.9))]})
-        df7a.columns = [' '.join(col).strip() for col in df7a.columns.values]
-        df7a.loc['All Maps'] = [df3a['turns'].describe()['count'],df3a['turns'].describe()['50%'],df3a['turns'].describe()['mean'],df3a['turns'].quantile(0.1),df3a['turns'].quantile(0.9)]
-        df7a = df7a.sort_values(['turns 10 pct']).reset_index()
-    else:
-        df6a=df3a.groupby(['Map']).agg({'perturn':['count','median','mean',('10 pct', lambda x: x.quantile(0.1)),('90 pct', lambda x: x.quantile(0.9))]})
-        df6a.columns = [' '.join(col).strip() for col in df6a.columns.values]
-        df6a.loc['All Maps'] = [df3a['perturn'].describe()['count'],df3a['perturn'].describe()['50%'],df3a['perturn'].describe()['mean'],df3a['perturn'].quantile(0.1),df3a['perturn'].quantile(0.9)]
-        df6a = df6a.sort_values(['perturn 10 pct'],ascending=False).reset_index()
-if mydb == 'mysql':
-    connection = sqlalchemy.create_engine("mysql+pymysql://" + "skotrla" + ":" + "srksrksrk" + "@" + "skotrla.mysql.pythonanywhere-services.com" + "/" + "skotrla$default").connect()
-    sq1 = f'SELECT "table" FROM games GROUP BY "table" HAVING MAX(elo2) >= {mymin} AND MAX(elo2) <= {mymax}'
-    sq2 = 'SELECT "table" FROM arknovap GROUP BY "table" HAVING COUNT(*) = 2'
-    sq1 = sq1.replace('"','`')
-    sq2 = sq2.replace('"','`')
-    sql = f'SELECT `Number of turns2` as turns, Score2, Map FROM arknovap WHERE ((`Game result` LIKE "%%1st%%" AND Score2 >= 100) OR `Triggered end of game` = "Yes") AND `table` IN ({sq1}) AND `table` IN ({sq2})'
-    df3a = pd.read_sql(sql,connection)
-    connection.close()
+    df3a['turns'] = df3a['turns'].astype('int')
+    df3a['Score2'] = df3a['Score2'].astype('int')    
     df3a['perturn'] = df3a['Score2'] / df3a['turns']
     if mytype != 'perturn':
         df7a=df3a.groupby(['Map']).agg({'turns':['count','median','mean',('10 pct', lambda x: x.quantile(0.1)),('90 pct', lambda x: x.quantile(0.9))]})
