@@ -73,7 +73,7 @@ else:
     #connection = sqlite3.connect('bga2flask.db')
     #df = pd.read_sql(f'SELECT MAP,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY MAP,turns,perturn',connection)
     connection = sqlite3.connect('bga.db')
-    df = pd.read_sql(f'SELECT Map,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY Map,turns,perturn',connection)
+    df = pd.read_sql(f'SELECT MAP,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY MAP,turns,perturn',connection)
     connection.close()
     #connection = sqlite3.connect('bga.db')
     #sq1 = f'SELECT "table" FROM games GROUP BY "table" HAVING MAX(CAST(elo2 AS INT)) >= {mymin} AND MAX(CAST(elo2 AS INT)) <= {mymax}'
