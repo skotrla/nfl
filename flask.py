@@ -51,7 +51,7 @@ if mydb == 'bga1':
     sq2 = f'SELECT "table" FROM arknovap GROUP BY "table" HAVING COUNT(*) = 2'
     #df3a = pd.read_sql(f'SELECT "Number of turns" as turns, Score as Score2, Map FROM arknovap WHERE (("Game result" LIKE "%1st%" AND CAST(Score as INT) >= 100) OR "Triggered end of game" = "Yes") AND "table" IN ({sq1}) AND "table" IN ({sq2})',connection)
     #df3a = pd.read_sql(f'SELECT "Number of turns" as turns, Score as Score2, Map FROM arknovap WHERE CAST(Score as INT) >= 100 AND "table" IN ({sq1}) AND "table" IN ({sq2})',connection)
-    df3a = pd.read_sql(f'SELECT t1."Number of turns" as turns, t1.Score as Score2, t1.Map, t2.elo, t1."table" FROM arknovap t1 LEFT JOIN (SELECT "table",MAX(CAST(elo AS INT)) as elo FROM arknova GROUP BY "table") t2 ON t1."table"=t2."table" WHERE CAST(t1.Score as INT) >= 100 AND t1."table" IN ({sq2})',connection)
+    df3a = pd.read_sql(f'SELECT t1."Number of turns" as turns, t1.Score as Score2, t1.Map, t2.elo, t1."table" FROM arknovap t1 LEFT JOIN (SELECT "table",MAX(CAST(elo AS INT)) as elo FROM games GROUP BY "table") t2 ON t1."table"=t2."table" WHERE CAST(t1.Score as INT) >= 100 AND t1."table" IN ({sq2})',connection)
     df3a['turns'] = df3a['turns'].astype('int')
     df3a['Score2'] = df3a['Score2'].astype('int')    
     df3a['perturn'] = df3a['Score2'] / df3a['turns']
