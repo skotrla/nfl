@@ -56,7 +56,7 @@ if mydb == 'bga1':
     df3a['Score2'] = df3a['Score2'].astype('int')    
     df3a['perturn'] = df3a['Score2'] / df3a['turns']
     df3a['count'] = 1
-    df3a.to_sql('arknovac',if_exists='replace',connection)
+    df3a.to_sql('arknovac',connection, if_exists='replace')
     connection.close()
     df3a = df3a[(df3a['elo'] >= mymin) & (df3a['elo'] <= mymax)] 
     if mytype != 'perturn':
