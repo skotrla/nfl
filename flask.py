@@ -71,7 +71,7 @@ if mydb == 'bga1':
         df6a = df6a.sort_values(['perturn 10 pct'],ascending=False).reset_index()
 else:
     #connection = sqlite3.connect('bga2flask.db')
-    df = pd.read_sql(f'SELECT MAP,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY MAP,turns,perturn',connection)
+    #df = pd.read_sql(f'SELECT MAP,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY MAP,turns,perturn',connection)
     connection = sqlite3.connect('bga.db')
     df = pd.read_sql(f'SELECT Map,turns,perturn,SUM(count) as count FROM arknovac WHERE elo >= {mymin} AND elo <= {mymax} GROUP BY Map,turns,perturn',connection)
     connection.close()
