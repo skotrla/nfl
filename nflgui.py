@@ -141,7 +141,7 @@ if len(sql)==0:
     sql.append('')
 mydate = st.query_params.get_all('mydate')
 if len(mydate)==0:
-    sql.append('')
+    mydate.append('')
 
 #match db[0]:
 #    case 'alt':
@@ -360,6 +360,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
