@@ -200,6 +200,12 @@ if db[0]=='':
         nfl['SWin'] = np.where(nfl['SWin'] > 0, 1, nfl['SWin'])
         nfl['SWin'] = np.where(nfl['SWin'] == 0, 0.5, nfl['SWin'])
         nfl['SWin'] = np.where(nfl['SWin'] < 0, 0, nfl['SWin'])    
+        nfl['OWin'] = 0
+        nfl['OWin'] = np.where(nfl['Total'] >= nfl['BTotal'], nfl['TActual'] - nfl['BTotal'],nfl['OWin'])
+        nfl['OWin'] = np.where(nfl['Total'] < nfl['BTotal'], nfl['BTotal'] - nfl['TActual'],nfl['OWin'])
+        nfl['OWin'] = np.where(nfl['OWin'] > 0, 1, nfl['OWin'])
+        nfl['OWin'] = np.where(nfl['OWin'] == 0, 0.5, nfl['OWin'])
+        nfl['OWin'] = np.where(nfl['OWin'] < 0, 0, nfl['OWin'])    
         fdf = filter_dataframe(nfl,[])
         st.title('NFL Game Most Recent Model/Spread')
         tactual = fdf['TActual'].min()
@@ -387,6 +393,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
