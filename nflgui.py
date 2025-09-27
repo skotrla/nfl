@@ -179,7 +179,7 @@ if db[0]=='':
         lastdate = lastdate['Date'].tolist()[0]
         nfl['Date']=pd.to_datetime(nfl['Date'],format='mixed')
         nfl['GameDate']=pd.to_datetime(nfl['GameDate'],format='mixed') - td(hours=6)
-        nfl['GameDate']=np.where(nfl['GameDate'].td.month in [9,10], nfl['GameDate'] + td(hours=1),nfl['GameDate'])
+        nfl['GameDate']=np.where(nfl['GameDate'].dt.month in [9,10], nfl['GameDate'] + td(hours=1),nfl['GameDate'])
         nfl['SCutoff'] = nfl['SCutoff'].astype('float')        
         nfl['OCutoff'] = nfl['OCutoff'].astype('float')        
         coll = nfl.columns
@@ -375,6 +375,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
