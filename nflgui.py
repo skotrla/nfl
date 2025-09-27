@@ -190,7 +190,9 @@ if db[0]=='':
         nfl['Winner'] = np.where(nfl['HActual'] == nfl['RActual'],'Tie',nfl['Winner'])
         nfl['Loser'] = np.where(nfl['HActual'] < nfl['RActual'],nfl['HTeamN'],nfl['RTeamN'])
         nfl['Loser'] = np.where(nfl['HActual'] == nfl['RActual'],'Tie',nfl['Loser'])
-        nfl['SWin'] = np.where(nfl['BWinner'] == nfl['HTeamN'], nfl['HActual'] + nfl['BPoints'] - nfl['RActual'],nfl['RActual'] + nfl['BPoints'] - nfl['HActual'])
+        nfl['SWin'] = 0
+        nfl['SWin'] = np.where(nfl['BWinner'] == nfl['HTeamN'], nfl['HActual'] + nfl['BPoints'] - nfl['RActual'],nfl['SWin'])
+        nfl['SWin'] = np.where(nfl['BWinner'] == nfl['RTeamN'], nfl['RActual'] + nfl['BPoints'] - nfl['HActual'],nfl['SWin'])
         nfl['SWin'] = np.where(nfl['SWin'] > 0, 1, nfl['SWin'])
         nfl['SWin'] = np.where(nfl['SWin'] == 0, 0.5, nfl['SWin'])
         nfl['SWin'] = np.where(nfl['SWin'] < 0, 0, nfl['SWin'])    
@@ -381,6 +383,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
