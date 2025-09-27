@@ -179,7 +179,8 @@ if db[0]=='':
         lastdate = lastdate['Date'].tolist()[0]
         nfl['Date']=pd.to_datetime(nfl['Date'],format='mixed')
         nfl['GameDate']=pd.to_datetime(nfl['GameDate'],format='mixed') - td(hours=6)
-        nfl['GameDate']=np.where(nfl['GameDate'].dt.month in [9,10], nfl['GameDate'] + td(hours=1),nfl['GameDate'])
+        nfl['GameDate']=np.where(nfl['GameDate'].dt.month == 9, nfl['GameDate'] + td(hours=1),nfl['GameDate'])
+        nfl['GameDate']=np.where(nfl['GameDate'].dt.month == 10, nfl['GameDate'] + td(hours=1),nfl['GameDate'])
         nfl['SCutoff'] = nfl['SCutoff'].astype('float')        
         nfl['OCutoff'] = nfl['OCutoff'].astype('float')        
         coll = nfl.columns
@@ -215,7 +216,8 @@ if db[0]=='':
         nfl2 = pd.concat([nfl2,nfl2b])
         nfl2['Date']=pd.to_datetime(nfl2['Date'],format='mixed')
         nfl2['GameDate']=pd.to_datetime(nfl2['GameDate'],format='mixed') - td(hours=6)
-        nfl2['GameDate']=np.where(nfl2['GameDate'].dt.month in [9,10], nfl2['GameDate'] + td(hours=1),nfl2['GameDate'])
+        nfl['GameDate']=np.where(nfl['GameDate'].dt.month == 9, nfl['GameDate'] + td(hours=1),nfl['GameDate'])
+        nfl['GameDate']=np.where(nfl['GameDate'].dt.month == 10, nfl['GameDate'] + td(hours=1),nfl['GameDate'])
         nfl2 = nfl2.merge(fdf[['Year','Week','RTeamN']],how='inner',on=['Year','Week','RTeamN'])
         connection.close()
         fdf2 = filter_dataframe(nfl2,[])
@@ -375,6 +377,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
