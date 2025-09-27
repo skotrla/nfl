@@ -167,7 +167,8 @@ if db[0]=='':
         nfle = pd.read_sql(f'SELECT Week, Year, RTeamN, Max(RActual) as RActual, Max(HActual) as HActual FROM games GROUP BY Week, Year, RTeamN',connection2)
         nflf = pd.concat([nfld,nfle])
         nfld = nflf.groupby(['Week','Year','RTeamN']).agg({'HActual':'max','RActual':'max'}).reset_index()
-        nfl.pop(['HActual','RActual'])
+        hactual = nfl.pop('HActual')
+        ractual = nfl.pop('RActual')
         nfl = nfl.merge(nfld,how='inner',on=['Week','Year','RTeamN'])
         hactual = nfl.pop('HActual')
         ractual = nfl.pop('RActual')
@@ -374,6 +375,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
