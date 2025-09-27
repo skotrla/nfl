@@ -154,8 +154,12 @@ if db[0]=='':
         #lastdate = pd.read_sql(f'SELECT Max(Date) as Date FROM games',connection)['Date'].tolist()[0]
         connection = sqlite3.connect('nfl.db')
         connection2 = sqlite3.connect('nfl2.db')
-        nfl = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games WHERE Date <= "{mydate}" GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection).drop(columns=['index'])
-        nflb = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games WHERE Date <= "{mydate}" GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection2).drop(columns=['index'])
+        if len(mydate) >= 1:
+            nfl = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games WHERE Date <= "{mydate}" GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection).drop(columns=['index'])
+            nflb = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games WHERE Date <= "{mydate}" GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection2).drop(columns=['index'])
+        else:
+            nfl = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection).drop(columns=['index'])
+            nflb = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection2).drop(columns=['index'])
         nflc = pd.concat([nfl,nflb])
         nflb = nflc.groupby(['Week','Year','RTeamN']).agg({'Date':'max'}).reset_index()
         nfl = nflc.merge(nflb,how='inner',on=['Week','Year','RTeamN','Date'])        
@@ -358,6 +362,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
