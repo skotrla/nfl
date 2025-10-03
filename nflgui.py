@@ -207,7 +207,7 @@ if db[0]=='':
         nfl['OWin'] = np.where(nfl['OWin'] == 0, 0.5, nfl['OWin'])
         nfl['OWin'] = np.where(nfl['OWin'] < 0, 0, nfl['OWin'])    
         fdf = filter_dataframe(nfl,[])
-        st.title('NFL Game Most Recent Model/Spread')
+        st.title('NFL Game Most Recent Model/Spread 100225')
         tactual = fdf['TActual'].min()
         scutoff = fdf['SCutoff'].min()
         ocutoff = fdf['OCutoff'].min()
@@ -393,6 +393,7 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+
 
 
 
