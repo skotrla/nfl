@@ -257,7 +257,7 @@ if db[0]=='':
         st.dataframe(fdf4, use_container_width=False,hide_index=True)
 if db[0]=='an':
 #        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
-       try:
+        try:
            os.remove('bga.db')
         except:
             pass
