@@ -269,7 +269,8 @@ if db[0]=='an':
             join_files(flist, 'bga.db')
         with open('bga.db', 'rb') as f:
             digest = hashlib.file_digest(f, "sha1").hexdigest()
-        if digest == 'c9b20289e8ce862fef4f5563168246da596a14f3':
+#        if digest == 'c9b20289e8ce862fef4f5563168246da596a14f3':
+        if True:
             connection = sqlite3.connect('bga.db')        
             connection2 = sqlite3.connect('bga2.db')    
             bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
