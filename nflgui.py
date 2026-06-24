@@ -11,6 +11,7 @@ from datetime import timedelta as td
 import numpy as np
 import warnings
 import os
+import hashlib
 
 v = 1.0
 
@@ -263,34 +264,39 @@ if db[0]=='an':
             flist.sort()
 #            os.system('cat ' + ' '.join(flist) + ' > bga.db')
             join_files(flist, 'bga.db')
-        connection = sqlite3.connect('bga.db')        
-        connection2 = sqlite3.connect('bga2.db')    
-        bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
-        bgab = pd.read_sql(f'SELECT * FROM arknova', connection2).drop(columns=['index'])
-        bga = pd.concat([bga,bgab])
-#        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
-        bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
-        bga = bga.sort_values(['Date'],ascending=False)
-        bga['score']=bga['score'].astype('float')
-        winner = bga.groupby(['table']).agg({'score':'max'}).reset_index().rename(columns={'score':'max'})
-        bga = bga.merge(winner,how='inner',on='table')
-        bga['winner']=np.where(bga['score']==bga['max'],True,False)
-        bga = bga.drop(columns='max')    
-#        lastdate = bga['Date'].max()
-        lastdate = pd.read_sql(f'SELECT MAX(Date) as Date FROM lastdate',connection2)['Date'].tolist()[0]
-        connection.close()
-        connection2.close()
-        coll = bga.columns
-        fdf = filter_dataframe(bga,['player'])
-        st.title('Ark Nova Stats '+ str(v))
-        #st.data_editor(
-        #    fdf,
-        #    column_config={
-        #   "Week": st.column_config.NumberColumn(format="%d"),
-        #    "Year": st.column_config.NumberColumn(format="%d"),
-        #    hide_index=True)
-        st.dataframe(fdf, use_container_width=True,hide_index=True)
-        st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+        with open('bga.db', "rb") as f:
+            digest = hashlib.file_digest(f, "sha1").hexdigest()
+        if digest == 'c9b20289e8ce862fef4f5563168246da596a14f3':
+            connection = sqlite3.connect('bga.db')        
+            connection2 = sqlite3.connect('bga2.db')    
+            bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
+            bgab = pd.read_sql(f'SELECT * FROM arknova', connection2).drop(columns=['index'])
+            bga = pd.concat([bga,bgab])
+    #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
+            bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
+            bga = bga.sort_values(['Date'],ascending=False)
+            bga['score']=bga['score'].astype('float')
+            winner = bga.groupby(['table']).agg({'score':'max'}).reset_index().rename(columns={'score':'max'})
+            bga = bga.merge(winner,how='inner',on='table')
+            bga['winner']=np.where(bga['score']==bga['max'],True,False)
+            bga = bga.drop(columns='max')    
+    #        lastdate = bga['Date'].max()
+            lastdate = pd.read_sql(f'SELECT MAX(Date) as Date FROM lastdate',connection2)['Date'].tolist()[0]
+            connection.close()
+            connection2.close()
+            coll = bga.columns
+            fdf = filter_dataframe(bga,['player'])
+            st.title('Ark Nova Stats '+ str(v))
+            #st.data_editor(
+            #    fdf,
+            #    column_config={
+            #   "Week": st.column_config.NumberColumn(format="%d"),
+            #    "Year": st.column_config.NumberColumn(format="%d"),
+            #    hide_index=True)
+            st.dataframe(fdf, use_container_width=True,hide_index=True)
+            st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+        else:
+            st.markdown(f'{hexdigest}',unsafe_allow_html=True
 if db[0]=='bga':
 #       connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
@@ -393,26 +399,4 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
