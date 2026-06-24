@@ -301,8 +301,7 @@ if db[0]=='an':
         else:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
-            st.markdown(f'{digest + " " + len(flist)}',unsafe_allow_html=True)
-
+            st.markdown(f'{digest + " " + str(len(flist))}',unsafe_allow_html=True)
 if db[0]=='bga':
 #       connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
