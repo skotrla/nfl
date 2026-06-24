@@ -257,10 +257,10 @@ if db[0]=='':
         st.dataframe(fdf4, use_container_width=False,hide_index=True)
 if db[0]=='an':
 #        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
-        try:
-           os.remove('bga.db')
-        except:
-            pass
+#        try:
+#           os.remove('bga.db')
+#        except:
+#            pass
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
         if len(flist) == 0:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
@@ -299,7 +299,10 @@ if db[0]=='an':
             st.dataframe(fdf, use_container_width=True,hide_index=True)
             st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
         else:
-            st.markdown(f'{digest}',unsafe_allow_html=True)
+            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
+            flist.sort()
+            st.markdown(f'{digest + " " + len(flist)}',unsafe_allow_html=True)
+
 if db[0]=='bga':
 #       connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
