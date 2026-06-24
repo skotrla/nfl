@@ -264,7 +264,7 @@ if db[0]=='an':
             flist.sort()
 #            os.system('cat ' + ' '.join(flist) + ' > bga.db')
             join_files(flist, 'bga.db')
-        with open('bga.db', "rb") as f:
+        with open('bga.db', 'rb') as f:
             digest = hashlib.file_digest(f, "sha1").hexdigest()
         if digest == 'c9b20289e8ce862fef4f5563168246da596a14f3':
             connection = sqlite3.connect('bga.db')        
@@ -296,7 +296,7 @@ if db[0]=='an':
             st.dataframe(fdf, use_container_width=True,hide_index=True)
             st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
         else:
-            st.markdown(f'{hexdigest}',unsafe_allow_html=True)
+            st.markdown(f'{digest}',unsafe_allow_html=True)
 if db[0]=='bga':
 #       connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
