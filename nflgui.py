@@ -296,7 +296,7 @@ if db[0]=='an':
             st.dataframe(fdf, use_container_width=True,hide_index=True)
             st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
         else:
-            st.markdown(f'{hexdigest}',unsafe_allow_html=True
+            st.markdown(f'{hexdigest}',unsafe_allow_html=True)
 if db[0]=='bga':
 #       connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
