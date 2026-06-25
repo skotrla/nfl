@@ -316,8 +316,8 @@ if db[0]=='an':
             failures = []
             for i in flist:
                 totalsize += os.path.getsize(i)
-                sha1 = repo.get_contents(filename).sha
-                sha2 = subprocess.run(['git','hash-object',filename],capture_output=True, text=True).stdout[:-1]
+                sha1 = repo.get_contents(i).sha
+                sha2 = subprocess.run(['git','hash-object',i],capture_output=True, text=True).stdout[:-1]
                 if sha1 != sha2:
                     failures.append(i)
             st.markdown(f'{digest + " " + str(totalsize) + " " + str(len(flist)) + " " + str(failures)}',unsafe_allow_html=True)
