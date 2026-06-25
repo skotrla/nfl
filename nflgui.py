@@ -12,6 +12,16 @@ import numpy as np
 import warnings
 import os
 import hashlib
+from github import Github
+import subprocess
+
+token = st.secrets['TOKEN']
+repopath = 'skotrla/nfl'
+g = Github(token)      
+repo = g.get_repo(repopath)
+headers = {"content-type": "application/json",
+            "authorization": f"token {token}",
+            "accept": "application/vnd.github+json"}
 
 v = 1.0
 
@@ -303,9 +313,14 @@ if db[0]=='an':
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
             totalsize = 0
+            failures = []
             for i in flist:
-                 totalsize += os.path.getsize(i)
-            st.markdown(f'{digest + " " + str(totalsize) + " " + str(len(flist)) + " " + str(flist)}',unsafe_allow_html=True)
+                totalsize += os.path.getsize(i)
+                sha1 = repo.get_contents(filename).sha
+                sha2 = subprocess.run(['git','hash-object',filename],capture_output=True, text=True).stdout[:-1]
+                if sha1 != sha2:
+                    failures.append(i)
+            st.markdown(f'{digest + " " + str(totalsize) + " " + str(len(flist)) + " " + str(failures)}',unsafe_allow_html=True)
 if db[0]=='bga':
 #       connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
