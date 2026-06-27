@@ -392,7 +392,7 @@ if db[0]=='andb':
         connection = sqlite3.connect('bga.db')        
         connection2 = sqlite3.connect('bga2.db')    
         sql[0]=sql[0].replace('_',' ').replace('*','%')
-        bga = pd.read_sql(f"SELECT * FROM arknovap {sql[0]} LIMIT 50000", connection).drop(columns=['index'])
+        bga = pd.read_sql(f"SELECT * FROM arknovap {sql[0]} LIMIT 100000", connection).drop(columns=['index'])
         bga['Number of turns']=bga['Number of turns'].str.replace('-','0').astype('int')
         bga['Score']=np.where(bga['Score'] == '-',0,bga['Score'])
         bga['Score']=bga['Score'].astype('int')
