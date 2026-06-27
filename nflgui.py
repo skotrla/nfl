@@ -272,15 +272,13 @@ if db[0]=='an':
             flist.sort()
             join_files(flist, 'bga.db')
         else:
-            with open('bga.db', 'rb') as f:
-                digest = subprocess.run(['git','hash-object',i],capture_output=True, text=True).stdout[:-1]
+            digest = subprocess.run(['git','hash-object','bga.db'],capture_output=True, text=True).stdout[:-1]
             if digest != '8c5501e4f7594c8f83d39e32bc3eab3c08a00407':
                 os.remove('bga.db')
                 flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
                 flist.sort()
                 join_files(flist, 'bga.db')
-        with open('bga.db', 'rb') as f:
-            digest = subprocess.run(['git','hash-object',i],capture_output=True, text=True).stdout[:-1]
+                digest = subprocess.run(['git','hash-object','bga.db'],capture_output=True, text=True).stdout[:-1]
         if digest == '8c5501e4f7594c8f83d39e32bc3eab3c08a00407':
             connection = sqlite3.connect('bga.db')        
             connection2 = sqlite3.connect('bga2.db')    
