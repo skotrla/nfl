@@ -354,7 +354,7 @@ if db[0]=='bga':
         bga = bga.merge(bga2,how='left',on=['table','name'])
         bga['table'] = bga['table'].astype('int')
         bga['elo'] = bga['elo'].str.replace('mer','0').astype('float')
-        bga['elo change'] = bga['elo change'].str.replace('mer','0').astype('float')        
+        bga['elo change'] = bga['elo change'].str.replace('mer','0').replace('ss=g','0').astype('float')        
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
         bga['Date'] = pd.to_datetime(bga['Date'],format='mixed')
         bga['date_delta'] = (bga['Date'] - bga['Date'].min())  / np.timedelta64(1,'D')
