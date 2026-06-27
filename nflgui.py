@@ -23,7 +23,7 @@ headers = {"content-type": "application/json",
             "authorization": f"token {token}",
             "accept": "application/vnd.github+json"}
 
-v = 1.0
+v = 1.01
 
 warnings.filterwarnings("ignore")
 
