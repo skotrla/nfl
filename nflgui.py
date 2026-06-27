@@ -266,21 +266,22 @@ if db[0]=='':
         st.title(f'NFL Game Counts {minscores}+ Scores {minyear}-{maxyear}')
         st.dataframe(fdf4, use_container_width=False,hide_index=True)
 if db[0]=='an':
-#        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
-#        try:
-#           os.remove('bga.db')
-#        except:
-#            pass
         flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
         if len(flist) == 0:
             flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
             flist.sort()
-#            os.system('cat ' + ' '.join(flist) + ' > bga.db')
             join_files(flist, 'bga.db')
+        else:
+            with open('bga.db', 'rb') as f:
+                digest = subprocess.run(['git','hash-object',i],capture_output=True, text=True).stdout[:-1]
+            if digest != '8c5501e4f7594c8f83d39e32bc3eab3c08a00407':
+                os.remove('bga.db')
+                flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
+                flist.sort()
+                join_files(flist, 'bga.db')
         with open('bga.db', 'rb') as f:
-            digest = hashlib.file_digest(f, "sha1").hexdigest()
-#        if digest == 'c9b20289e8ce862fef4f5563168246da596a14f3':
-        if True:
+            digest = subprocess.run(['git','hash-object',i],capture_output=True, text=True).stdout[:-1]
+        if digest == '8c5501e4f7594c8f83d39e32bc3eab3c08a00407':
             connection = sqlite3.connect('bga.db')        
             connection2 = sqlite3.connect('bga2.db')    
             bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
