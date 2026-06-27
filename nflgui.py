@@ -337,7 +337,7 @@ if db[0]=='bga':
         connection = sqlite3.connect('bga.db')        
         connection2 = sqlite3.connect('bga2.db')    
         cursor = connection.cursor()
-        cursor.excute(f'UPDATE games SET elo="0" WHERE "table"="857665568"' 
+        cursor.excute(f'UPDATE games SET elo="0" WHERE "table"="857665568"') 
         pl = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection)
         plb = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection2)
         pl = pd.concat([pl,plb]).drop_duplicates()['player'].tolist()
