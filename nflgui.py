@@ -130,7 +130,7 @@ def validate():
     flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
     flist.sort()
     join_files(flist, 'bgabga.db')
-    digest = subprocess.run(['git','hash-object','bga.db'],capture_output=True, text=True).stdout[:-1]            
+    digest = subprocess.run(['git','hash-object','bgabga.db'],capture_output=True, text=True).stdout[:-1]            
     if digest == dbhash:
         os.rename('bgabga.db','bga.db')
         return True
