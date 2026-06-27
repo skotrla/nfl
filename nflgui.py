@@ -416,7 +416,7 @@ if db[0]=='andb':
         connection2.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,['player'])
-        st.title('Ark Nova Stats '+ str(v) + ' ' + sql[0][:20])
+        st.title('Ark Nova Stats '+ str(v) + ' ' + sql[0][:40])
         #st.data_editor(
         #    fdf,
         #    column_config={
@@ -425,5 +425,5 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-        st.markdown(f'<i>{mycount} rows for {sql[0][:20]} out of {totalcount} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+        st.markdown(f'<i>{mycount} rows for {sql[0][:40]} out of {totalcount} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
 
