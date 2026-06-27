@@ -425,5 +425,5 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-        st.markdown(f'<i>{mycount} rows for {sql[0][:20] out of {totalcount} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+        st.markdown(f'<i>{mycount} rows for {sql[0][:20]} out of {totalcount} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
 
