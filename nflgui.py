@@ -392,7 +392,9 @@ if db[0]=='andb':
         connection = sqlite3.connect('bga.db')        
         connection2 = sqlite3.connect('bga2.db')    
         sql[0]=sql[0].replace('_',' ').replace('*','%')
-        bga = pd.read_sql(f"SELECT * FROM arknovap {sql[0]} LIMIT 100000", connection).drop(columns=['index'])
+        totalcount = pd.read_sql(f'SELECT COUNT(*) as cnt FROM arknovap',connection)['cnt'][0]
+        mycount = pd.read_sql(f'SELECT COUNT(*) as cnt FROM arknovap {sql[0]}',connection)['cnt'][0]
+        bga = pd.read_sql(f'SELECT * FROM arknovap {sql[0]} LIMIT 100000', connection).drop(columns=['index'])
         bga['Number of turns']=bga['Number of turns'].str.replace('-','0').astype('int')
         bga['Score']=np.where(bga['Score'] == '-',0,bga['Score'])
         bga['Score']=bga['Score'].astype('int')
@@ -414,7 +416,7 @@ if db[0]=='andb':
         connection2.close()
         coll = bga.columns
         fdf = filter_dataframe(bga,['player'])
-        st.title('Ark Nova Stats '+ str(v) + ' ' + sql[0])
+        st.title('Ark Nova Stats '+ str(v) + ' ' + sql[0][:20])
         #st.data_editor(
         #    fdf,
         #    column_config={
@@ -423,4 +425,5 @@ if db[0]=='andb':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+        st.markdown(f'<i>{mycount} rows for {sql[0][:20] out of {totalcount} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
 
