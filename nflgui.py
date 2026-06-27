@@ -385,6 +385,7 @@ if db[0]=='bga':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
+        st.line_chart(data=fdf, *, x='Date', y='elo', width="stretch", height="content", use_container_width=None)
 if db[0]=='andb':
     if validate():
         connection = sqlite3.connect('bga.db')        
