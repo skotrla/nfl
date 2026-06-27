@@ -24,6 +24,7 @@ headers = {"content-type": "application/json",
             "accept": "application/vnd.github+json"}
 
 v = 1.01
+dbhash = '8c5501e4f7594c8f83d39e32bc3eab3c08a00407'
 #why won't this update?
 
 warnings.filterwarnings("ignore")
@@ -119,6 +120,35 @@ def join_files(input_files, output_file):
             with open(filename, "rb") as infile:
                 outfile.write(infile.read())
 
+def validate():
+    flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
+    if len(flist) != 0:
+        return True
+    flist = [x for x in os.listdir('.') if x.find('bgabga.db') >= 0]
+    if len(flist) != 0:
+        os.remove('bgabga.db')
+    flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
+    flist.sort()
+    join_files(flist, 'bgabga.db')
+    digest = subprocess.run(['git','hash-object','bga.db'],capture_output=True, text=True).stdout[:-1]            
+    if digest == dbhash:
+        os.rename('bgabga.db','bga.db')
+        return True
+    else:
+        os.remove('bgabga.db')
+        flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
+        flist.sort()
+        totalsize = 0
+        failures = []
+        for i in flist:
+            totalsize += os.path.getsize(i)
+            sha1 = repo.get_contents(i).sha
+            sha2 = subprocess.run(['git','hash-object',i],capture_output=True, text=True).stdout[:-1]
+            if sha1 != sha2:
+                failures.append(i)
+        st.markdown(f'{digest + " " + str(totalsize) + " " + str(len(flist)) + " " + str(failures)}',unsafe_allow_html=True)
+        return False
+
 #streamlit run nflgui.py --server.port=4016
 st.set_page_config(layout="wide")
 st.markdown("""
@@ -154,12 +184,15 @@ if len(sql)==0:
 mydate = st.query_params.get_all('mydate')
 if len(mydate)==0:
     mydate.append('')
+sync = st.query_params.get_all('sync')
+if len(sync)==0:
+    sync.append('')
 
-#match db[0]:
-#    case 'alt':
-#        pass
-#    case _:
-if db[0]=='':
+if sync[0] != '':
+    subprocess.run(['curl','-Lo','bga2.db', 'http://github.com/skotrla/nfl/raw/refs/heads/main/bga2.db'],capture_output=True, text=True)
+    subprocess.run(['curl','-Lo','nflgui.py', 'http://github.com/skotrla/nfl/raw/refs/heads/main/nflgui.py'],capture_output=True, text=True)
+    
+if db[0] == '':
         #connection = sqlite3.connect('c://users//2019//desktop//print//nfl.db')
         #connection2 = sqlite3.connect('c://users//2019//desktop//print//nfl2.db')
         #nfl = pd.read_sql(f'SELECT g1.* FROM games g1 INNER JOIN (SELECT Week, Year, RTeamN, MAX(Date) as Date FROM games GROUP BY Week, Year, RTeamN) g2 ON g1.Week=g2.Week AND g1.Year=g2.Year AND g1.RTeamN=g2.RTeamN AND g1.Date=g2.Date',connection).drop(columns=['index'])
@@ -267,21 +300,8 @@ if db[0]=='':
         st.title(f'NFL Game Counts {minscores}+ Scores {minyear}-{maxyear}')
         st.dataframe(fdf4, use_container_width=False,hide_index=True)
 if db[0]=='an':
-        flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
-        if len(flist) == 0:
-            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
-            flist.sort()
-            join_files(flist, 'bga.db')
-            digest = subprocess.run(['git','hash-object','bga.db'],capture_output=True, text=True).stdout[:-1]            
-        else:
-            digest = subprocess.run(['git','hash-object','bga.db'],capture_output=True, text=True).stdout[:-1]
-            if digest != '8c5501e4f7594c8f83d39e32bc3eab3c08a00407':
-                os.remove('bga.db')
-                flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
-                flist.sort()
-                join_files(flist, 'bga.db')
-                digest = subprocess.run(['git','hash-object','bga.db'],capture_output=True, text=True).stdout[:-1]
-        if digest == '8c5501e4f7594c8f83d39e32bc3eab3c08a00407':
+    if True:
+        if validate():
             connection = sqlite3.connect('bga.db')        
             connection2 = sqlite3.connect('bga2.db')    
             bga = pd.read_sql(f'SELECT * FROM arknova', connection).drop(columns=['index'])
@@ -310,30 +330,12 @@ if db[0]=='an':
             #    hide_index=True)
             st.dataframe(fdf, use_container_width=True,hide_index=True)
             st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-        else:
-            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
-            flist.sort()
-            totalsize = 0
-            failures = []
-            for i in flist:
-                totalsize += os.path.getsize(i)
-                sha1 = repo.get_contents(i).sha
-                sha2 = subprocess.run(['git','hash-object',i],capture_output=True, text=True).stdout[:-1]
-                if sha1 != sha2:
-                    failures.append(i)
-            st.markdown(f'{digest + " " + str(totalsize) + " " + str(len(flist)) + " " + str(failures)}',unsafe_allow_html=True)
 if db[0]=='bga':
-#       connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
-        flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
-        if len(flist) == 0:
-            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
-            flist.sort()
-#            os.system('cat ' + ' '.join(flist) + ' > bga.db')
-            join_files(flist, 'bga.db')
-        connection = sqlite3.connect('bga.db')
-        connection2 = sqlite3.connect('bga2.db')    
 #        bga = pd.read_sql(f'SELECT g.*, p.name FROM (SELECT * FROM games WHERE player IN (SELECT player FROM players WHERE pri=1)) g INNER JOIN players p ON g.player=p.player', connection)
 #        bga['Date'] = pd.to_datetime(bga['Date'])
+    if validate():
+        connection = sqlite3.connect('bga.db')        
+        connection2 = sqlite3.connect('bga2.db')    
         pl = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection)
         plb = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection2)
         pl = pd.concat([pl,plb]).drop_duplicates()['player'].tolist()
@@ -382,14 +384,7 @@ if db[0]=='bga':
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
 if db[0]=='andb':
-#        connection = sqlite3.connect('c://users//2019//desktop//print//bga.db')
-#        os.remove('bga.db')
-        flist = [x for x in os.listdir('.') if x.find('bga.db') >= 0]
-        if len(flist) == 0:
-            flist = [x for x in os.listdir('.') if x.find('bgadb') >= 0]
-            flist.sort()
-#            os.system('cat ' + ' '.join(flist) + ' > bga.db')
-            join_files(flist, 'bga.db')
+    if validate():
         connection = sqlite3.connect('bga.db')        
         connection2 = sqlite3.connect('bga2.db')    
         sql[0]=sql[0].replace('_',' ').replace('*','%')
@@ -427,4 +422,3 @@ if db[0]=='andb':
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
         st.markdown(f'<i>{mycount} rows for {sql[0][:40]} out of {totalcount} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-
