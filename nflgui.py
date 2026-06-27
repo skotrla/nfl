@@ -396,9 +396,9 @@ if db[0]=='andb':
         bga['Number of turns']=bga['Number of turns'].str.replace('-','0').astype('int')
         bga['Score']=np.where(bga['Score'] == '-',0,bga['Score'])
         bga['Score']=bga['Score'].astype('int')
-        if len(bga) >= 100000:
-            bga = bga[bga['Number of turns'] <= 35]
-            bga = bga[bga['Score'] >= 100]
+#        if len(bga) >= 100000:
+#            bga = bga[bga['Number of turns'] <= 35]
+#            bga = bga[bga['Score'] >= 100]
 #        bgab = pd.read_sql(f'SELECT * FROM arknovap {sql[0]}', connection2).drop(columns=['index'])
 #        bga = pd.concat([bga,bgab])
 #        bga['Date'] = pd.to_datetime(bga['Date']).dt.strftime('%Y-%m-%d')
