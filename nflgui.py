@@ -389,8 +389,8 @@ if db[0]=='bga':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-        if c == 'map':
-            st.title(f'Arknova ELO over Time by {c}')
+        if c[0] == 'map':
+            st.title(f'Arknova ELO over Time by Map')
             st.line_chart(data=fdf[fdf['elo']>=1], x='Date', y='elo', color='map', width="stretch", height="content", use_container_width=None)
         else:
             st.title(f'Arknova ELO over Time by Player')
