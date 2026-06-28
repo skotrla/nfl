@@ -23,7 +23,7 @@ headers = {"content-type": "application/json",
             "authorization": f"token {token}",
             "accept": "application/vnd.github+json"}
 
-v = 1
+v = 1.0
 dbhash = '8c5501e4f7594c8f83d39e32bc3eab3c08a00407'
 
 warnings.filterwarnings("ignore")
