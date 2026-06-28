@@ -187,6 +187,9 @@ if len(mydate)==0:
 sync = st.query_params.get_all('sync')
 if len(sync)==0:
     sync.append('')
+c = st.query_params.get_all('c')
+if len(c)==0:
+    c.append('')
 
 if sync[0] != '':
     subprocess.run(['curl','-Lo','bga2.db', 'http://github.com/skotrla/nfl/raw/refs/heads/main/bga2.db'],capture_output=True, text=True)
@@ -337,6 +340,7 @@ if db[0]=='bga':
         connection = sqlite3.connect('bga.db')        
         connection2 = sqlite3.connect('bga2.db')    
         cursor = connection.cursor()
+#DBFIX
         cursor.execute(f'UPDATE games SET elo="0" WHERE "table"="857665568"') 
         pl = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection)
         plb = pd.read_sql(f'SELECT player FROM players WHERE pri=1',connection2)
@@ -386,7 +390,10 @@ if db[0]=='bga':
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
         st.title('Arknova ELO over Time')
-        st.line_chart(data=fdf[fdf['elo']>=1], x='Date', y='elo', color='name', width="stretch", height="content", use_container_width=None)
+        if c == 'Map':
+            st.line_chart(data=fdf[fdf['elo']>=1], x='Date', y='elo', color='Map', width="stretch", height="content", use_container_width=None)
+        else:
+            st.line_chart(data=fdf[fdf['elo']>=1], x='Date', y='elo', color='name', width="stretch", height="content", use_container_width=None)
 if db[0]=='andb':
     if validate():
         connection = sqlite3.connect('bga.db')        
