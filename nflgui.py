@@ -23,9 +23,8 @@ headers = {"content-type": "application/json",
             "authorization": f"token {token}",
             "accept": "application/vnd.github+json"}
 
-v = 1.01
+v = 1
 dbhash = '8c5501e4f7594c8f83d39e32bc3eab3c08a00407'
-#why won't this update?
 
 warnings.filterwarnings("ignore")
 
