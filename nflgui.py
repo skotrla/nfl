@@ -392,7 +392,7 @@ if db[0]=='bga':
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
         if c[0] == 'map':
-            if y[0] = 'avg':
+            if y[0] == 'avg':
                 st.title(f'Arknova ELO Avg by Map')
                 st.bar_chart(data=fdf.groupby(['name','map']).sum(numeric_only=True).reset_index(), x='map', y='elo change', color='name', stack=False, width="stretch", height="content")
             else:
