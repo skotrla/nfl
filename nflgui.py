@@ -23,7 +23,7 @@ headers = {"content-type": "application/json",
             "authorization": f"token {token}",
             "accept": "application/vnd.github+json"}
 
-v = 1.01
+v = 1.0
 dbhash = '8c5501e4f7594c8f83d39e32bc3eab3c08a00407'
 #why won't this update?
 
@@ -385,7 +385,7 @@ if db[0]=='bga':
         #    hide_index=True)
         st.dataframe(fdf, use_container_width=True,hide_index=True)
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
-        st.title('Arknova ELO over Time'+ str(v))
+        st.title('Arknova ELO over Time')
         st.line_chart(data=fdf[fdf['elo']>=1], x='Date', y='elo', color='name', width="stretch", height="content", use_container_width=None)
 if db[0]=='andb':
     if validate():
