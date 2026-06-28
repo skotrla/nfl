@@ -390,7 +390,7 @@ if db[0]=='bga':
         st.markdown(f'<i>{len(fdf)} rows out of {len(bga)} total rows<br>Last updated: {lastdate}</i>',unsafe_allow_html=True)
         if c[0] == 'map':
             st.title(f'Arknova ELO by Map')
-            st.bar_chart(data=fdf.groupby(['name','map']).sum(numeric_only=True).reset_index(), x='map', y='elo change', color='name', stacked=False, width="stretch", height="content")
+            st.bar_chart(data=fdf.groupby(['name','map']).sum(numeric_only=True).reset_index(), x='map', y='elo change', color='name', stack=False, width="stretch", height="content")
         else:
             st.title(f'Arknova ELO over Time by Player')
             st.line_chart(data=fdf[fdf['elo']>=1], x='Date', y='elo', color='name', width="stretch", height="content", use_container_width=None)
